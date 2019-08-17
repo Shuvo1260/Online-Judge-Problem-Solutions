@@ -2,35 +2,48 @@
 #include<cstring>
 #include<algorithm>
 
+using namespace std;
+
+char first[1001];
+char second[1001];
+int counter;
+int firstLength;
+int secondLength;
+int table[1100][1100];
+// This function determinate the longest common subsequence
+int lcs(int firstLen, int secondLen)
+{
+    for(int row = 1; row <= firstLen; row++)
+    {
+        for(int column = 1; column <= secondLen; column++)
+        {
+            if(first[row-1] == second[column-1])
+            {
+                table[row][column] = table[row-1][column-1]+1;
+            }
+            else
+            {
+                table[row][column] = max(table[row][column-1], table[row-1][column]);
+            }
+        }
+    }
+
+    return table[firstLen][secondLen];
+}
+
 int main()
 {
-    char first[1001];
-    char second[1001];
 
-    while(scanf("%s%s",first, second) == 2)
+    while(gets(first))
     {
-        int character[26] = {0};
+        gets(second);
+        firstLength = strlen(first);
+        secondLength = strlen(second);
 
-        int len = strlen(first);
-        int char_index;
-        for(int index = 0; index < len; index++)
-        {
-            char_index = (int) first[index] - 97;
-            character[char_index]++;
-        }
-        len = strlen(second);
-        for(int index = 0; index < len; index++)
-        {
-            char_index = (int) second[index] - 97;
-            character[char_index]--;
-        }
-        int counter = 0;
-        for(int index = 0; index < 26; index++)
-        {
-            if(character[index] != 0)
-                counter++;
-        }
-        printf("%d\n",abs(counter - len));
+        int result;
+
+        result = lcs(firstLength,secondLength);
+        printf("%d\n", result);
 
 
     }
